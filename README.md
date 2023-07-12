@@ -30,9 +30,7 @@ public class Alumno {
     private Long licenciaturaId;
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "alumno")
     private List<Kardex> kardexs;
-
 }
-
 ```
 
 ## Principio Abierto/Cerrado
@@ -41,7 +39,7 @@ _Este principio establece que los componentes del software deben estar abiertos 
 
 ### ¿Dónde está presente en el código?
 
-En el proyecto se estuvo trabajando con los paquetes ```Repository```, los cuales contienen clases con interfaces que nos otorgan funcionalidades como la capacidad de realizar operaciones con la base de datos, dado que extendemos de clases de _Jpa_, pero si prestamos atención podemos ver que se pueden agregar métodos distintos a la clase original sin afectarla, lo cual indica que se cumple este principio.
+En el proyecto se estuvo trabajando con los paquetes ```Repository```, los cuales contienen clases con interfaces que nos otorgan funcionalidades como la capacidad de realizar operaciones con la base de datos, dado que extendemos de clases de ```Jpa```, pero si prestamos atención podemos ver que se pueden agregar métodos distintos a la clase original sin afectarla, lo cual indica que se cumple este principio.
 
 ```java
 public interface KardexRepository extends JpaRepository<Kardex, Long> {
@@ -54,7 +52,7 @@ _Este principio establece que una subclase puede ser sustituida por su superclas
 
 ### ¿Dónde está presente en el código?
 
-En el proyecto, este principio está presente con las clases que extienden de ```Service```. Por ejemplo cuando se tiene la interfaz CostoMateriaRepository que extiende de JpaRepository se implementan los métodos de JpaRepository, como findAll(), save() y deleteById(). Entonces, a pesar de que en el servicio no se tenga JpaRepository sino CostoMateriaRepository, el código debe seguir funcionando correctamente, ya que CostoMateriaRepository cumple con los métodos establecidos por JpaRepository, tal como se muestra a continuación.
+En el proyecto, este principio está presente con las clases que extienden de ```Service```. Por ejemplo cuando se tiene la interfaz ```CostoMateriaRepository``` que extiende de ```JpaRepository``` se implementan los métodos de ```JpaRepository```, como _findAll()_, _save()_ y _deleteById()_. Entonces, a pesar de que en el servicio no se tenga ```JpaRepository``` sino ```CostoMateriaRepository```, el código debe seguir funcionando correctamente, ya que ```CostoMateriaRepository``` cumple con los métodos establecidos por ```JpaRepository```, tal como se muestra a continuación.
 
 ```java
 public interface CostoMateriaRepository extends JpaRepository<CostoMateria, Long> {
@@ -137,9 +135,9 @@ _Este principio establece que los módulos de alto nivel no deben de depender de
 ### ¿Dónde está presente en el código?
 
 En el proyecto podemos visualizar el cumplimiento de este principio SOLID al utilizar la anotación ```@Autowired```, dado que esta sirve para la inyección de dependencias. 
-En el código siguiente, la etiqueta ```@Autowired``` se utiliza pra inyectar dependencias de dos servicios, _KardexService_ y _alumnoService_, al hacerlo nos evitamos el crear instancias de los servicios, pues Spring se encarga de crearlas por nosotros, de modo que nuestro controlador 'AlumnoController' depende de las abstracciones de dichos servicios y no necesita conocer como se implementan, sino solo necesita saber como interactuar con dichas abstracciones.
-```java
+En el código siguiente, la etiqueta ```@Autowired``` se utiliza pra inyectar dependencias de dos servicios, _KardexService_ y _alumnoService_, al hacerlo nos evitamos el crear instancias de los servicios, pues Spring se encarga de crearlas por nosotros, de modo que nuestro controlador ```AlumnoController``` depende de las abstracciones de dichos servicios y no necesita conocer como se implementan, sino solo necesita saber como interactuar con dichas abstracciones.
 
+```java
 @RestController
 @RequestMapping(value = "/alumno")
 @Log4j2
@@ -172,7 +170,6 @@ public class AlumnoController {
          alumnoService.deleteAlumno(id);
     }
 }
-
 ```
 ## Referencias
 
