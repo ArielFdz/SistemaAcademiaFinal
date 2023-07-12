@@ -6,6 +6,34 @@ _Este principio establece que un componente o clase debe tener una responsabilid
 
 ### ¿Dónde está presente en el código?
 
+En el proyecto, este principio está presente en muchas partes, desde su estructura de carpetas (paquetes) hasta las clases contenidas en dichas carpetas. Por ejemplo, el paquete ```entity``` tiene la responsabilidad de almacenar las clases que definan los modelos que se vayan a utilizar, tal cual lo hace la clase ```Alumno```.
+
+
+```java
+@Entity
+@Table (name = "alumnos")
+@Data
+@NoArgsConstructor
+public class Alumno {
+    @Id
+    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+    @Column(name ="matricula")
+    private String matricula;
+    private String nombre;
+    private String apellidos;
+    private LocalDate edad;
+    @Column(name = "sexo", precision = 1, length = 1)
+    private char sexo;
+    @Column(name = "licenciatura_id")
+    private Long licenciaturaId;
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "alumno")
+    private List<Kardex> kardexs;
+
+}
+
+```
 
 ## Principio Abierto/Cerrado
 
@@ -40,6 +68,44 @@ _Este principio establece que los módulos de alto nivel no deben de depender de
 
 ### ¿Dónde está presente en el código?
 
+En el proyecto podemos visualizar el cumplimiento de este principio SOLID al utilizar la anotación ```@Autowired```, dado que esta sirve para la inyección de dependencias. 
+En el código siguiente, la etiqueta ```@Autowired``` se utiliza pra inyectar dependencias de dos servicios, _KardexService_ y _alumnoService_, al hacerlo nos evitamos el crear instancias de los servicios, pues Spring se encarga de crearlas por nosotros, de modo que nuestro controlador 'AlumnoController' depende de las abstracciones de dichos servicios y no necesita conocer como se implementan, sino solo necesita saber como interactuar con dichas abstracciones.
+```java
+
+@RestController
+@RequestMapping(value = "/alumno")
+@Log4j2
+public class AlumnoController {
+    @Autowired
+    private AlumnoService alumnoService;
+
+    @Autowired
+    KardexService kardexService;
+
+    @GetMapping
+    public List<Alumno> getAllAlumnos() {
+        return alumnoService.getAllAlumnos();
+    }
+
+    @PostMapping
+    public Alumno createAlumno(@RequestBody Alumno alumno){
+        log.info("Alumno  a guardar: "+alumno.toString());
+        return alumnoService.createAlumno(alumno);
+    }
+
+    @PutMapping
+    public Alumno updateAlumno(@RequestBody Alumno alumno) {
+        log.info("Alumno a actualizar :"+alumno.toString());
+        return alumnoService.updateAlumno(alumno);
+    }
+
+    @DeleteMapping("/{id}")
+    public void deletealumno(@PathVariable (value = "id") Long id){
+         alumnoService.deleteAlumno(id);
+    }
+}
+
+```
 ## Referencias
 
 Visitar la página [Kata Software](https://kata-software.com/es/publicaciones/principios-solid-en-programacion).
