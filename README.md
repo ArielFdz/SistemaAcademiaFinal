@@ -41,7 +41,7 @@ _Este principio establece que los componentes del software deben estar abiertos 
 
 ### ¿Dónde está presente en el código?
 
-En el proyecto se estuvo trabajando con los paquetes *_Repository_*, los cuales contienen clases con interfaces que nos otorgan funcionalidades como la capacidad de realizar operaciones con la base de datos, dado que extendemos de clases de _Jpa_, pero si prestamos atención podemos ver que se pueden agregar métodos distintos a la clase original sin afectarla, lo cual indica que se cumple este principio.
+En el proyecto se estuvo trabajando con los paquetes ```Repository```, los cuales contienen clases con interfaces que nos otorgan funcionalidades como la capacidad de realizar operaciones con la base de datos, dado que extendemos de clases de _Jpa_, pero si prestamos atención podemos ver que se pueden agregar métodos distintos a la clase original sin afectarla, lo cual indica que se cumple este principio.
 
 ```java
 public interface KardexRepository extends JpaRepository<Kardex, Long> {
@@ -61,6 +61,25 @@ _Este principio establece que una subclase puede ser sustituida por su superclas
 _Este principio establece que los clientes no deben ser forzados a depender de interfaces que no utilizan. Es importante que cada clase implemente las interfaces que va a utilizar. De este modo, agregar nuevas funcionalidades o modificar las existentes será más fácil._
 
 ### ¿Dónde está presente en el código?
+
+En el proyecto este principio se puede observar al momento de utilizar el paquete ```Repository``` para definir interfaces que facilitan la persistencia de los datos. Por ejemplo, ```LicenciaturaRepository``` contiene los métodos básicos para las operaciones del ```JPA``` de la clase ```Licenciatura```, y lo mismo ocurre con ```MateriaRepository``` y ```PlanEstudiosRepository``` con las clases  ```Materia``` y ```PlanEstudio``` respectivamente. Así, cada cliente puede elegir el interfaz que mejor se adapte a su caso de uso.
+
+Paquete ```Repository```:
+
+<img width="550px" height="158px" alt="PackageRepository" src="./Repository.png">
+
+Interfaz ```LicenciaturaRepository```:
+
+```java
+public interface LicenciaturaRepository extends JpaRepository <Licenciatura, Long> {
+    Optional<Licenciatura> findByRevoe(String revoe);
+
+    Licenciatura findByNombreAndRevoe (String nombre, String revoe);
+
+    @Query("select l from Licenciatura l where l.nombre = :param")
+    List<Licenciatura> findByOtherParams (@Param("param") String param);
+}
+```
 
 ## Principio de Inversión de Dependencias
 
@@ -108,5 +127,8 @@ public class AlumnoController {
 ```
 ## Referencias
 
-Visitar la página [Kata Software](https://kata-software.com/es/publicaciones/principios-solid-en-programacion).
+- Marcos, N. A. (2020, September 16). Principios SOLID en programación. Kata Software. https://kata-software.com/es/publicaciones/principios-solid-en-programacion
+<!--- Visitar la página [KATA SOFTWARE](https://kata-software.com/es/publicaciones/principios-solid-en-programacion)-->
+- Khaled, A. (2023, February 11). Solid principles in spring Boot: A comprehensive guide. Amr’s Tech Universe. https://amrtechuniverse.com/solid-principles-in-spring-boot
+<!--- Visitar la página [AMR'S TECH UNIVERSE](https://kata-software.com/es/publicaciones/principios-solid-en-programacion).-->
 

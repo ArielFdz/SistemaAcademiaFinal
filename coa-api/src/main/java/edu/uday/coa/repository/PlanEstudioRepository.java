@@ -8,7 +8,6 @@ import java.util.Optional;
 
 public interface PlanEstudioRepository extends JpaRepository<PlanEstudio, Long> {
     Optional<PlanEstudio> findByLicenciatura_RevoeAndAndMateriaClaveMateria(String revoe, String materia);
-
-
+    
     List<PlanEstudio> findPlanEstudioByLicenciatura_Id(Long licenciaturaId);
 }
